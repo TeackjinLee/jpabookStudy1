@@ -8,14 +8,16 @@ import java.util.Date;
  * Date: 13. 5. 24. Time: 오후 7:43
  */
 @Entity
-@Table(name="MEMBER")
+@Table(name="MEMBER", uniqueConstraints = {@UniqueConstraint(
+        name = "NAME_AGE_UNIQUE",
+        columnNames = {"NAME","AGE"})})
 public class Member {
 
     @Id
     @Column(name = "ID")
     private String id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false, length = 10)   // 추가
     private String username;
 
     private Integer age;
