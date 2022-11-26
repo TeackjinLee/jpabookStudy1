@@ -1,4 +1,6 @@
-package com.study.jpabook.jpabook01;
+package com.study.jpabook.jpabook01.api;
+
+import com.study.jpabook.jpabook01.datasource.jpa01.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,7 +23,7 @@ public class JpaMain3 {
         memberA.setUsername("hi");
         memberA.setAge(10);
 
-        //em.update(member) 이런 코드가 있어야 하지 않을까?
+        //m.update(member) 이런 코드가 있어야 하지 않을까?
 
         transaction.commit(); // [트랜잭션] 커밋
     }

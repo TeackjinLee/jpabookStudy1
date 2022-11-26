@@ -1,4 +1,4 @@
-package com.study.jpabook.jpabook01;
+package com.study.jpabook.jpabook01.datasource.jpa01;
 
 import javax.persistence.*;
 import java.util.Date;

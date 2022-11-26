@@ -1,4 +1,6 @@
-package com.study.jpabook.jpabook01;
+package com.study.jpabook.jpabook01.api;
+
+import com.study.jpabook.jpabook01.datasource.jpa01.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
