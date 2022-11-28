@@ -47,6 +47,11 @@ public class Member2 {
 
     // 연관관계 설정
     public void setTeam(Team team) {
+
+        // 기존 팀과 관계를 제거
+        if (this.team != null){
+            this.team.getMembers().remove(this);
+        }
         this.team = team;
         team.getMembers().add(this);
     }

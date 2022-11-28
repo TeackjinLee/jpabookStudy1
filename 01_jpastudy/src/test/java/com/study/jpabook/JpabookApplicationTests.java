@@ -2,6 +2,8 @@ package com.study.jpabook;
 
 import com.study.jpabook.jpabook01.datasource.jap05.Member2;
 import com.study.jpabook.jpabook01.datasource.jap05.Team;
+import com.study.jpabook.jpabook01.datasource.jpa06.MemberOneToMany;
+import com.study.jpabook.jpabook01.datasource.jpa06.TeamOneToMany;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -168,6 +170,29 @@ class JpabookApplicationTests {
         tx.commit();
     }
 
+    //6.7 일대다 단방향 매핑의 단점
+    @Test
+    public void testsSave(){
+
+        //엔티티 매니저 팩토리 생성
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
+        EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
+        tx.begin();
+
+        MemberOneToMany member1 = new MemberOneToMany("member1");
+        MemberOneToMany member2 = new MemberOneToMany("member2");
+
+        TeamOneToMany team1 = new TeamOneToMany("team1");
+        team1.getMembers().add(member1);
+        team1.getMembers().add(member2);
+
+        em.persist(member1);//INSERT-member1
+        em.persist(member2);//INSERT-member2
+        em.persist(team1);  //INSERT-team1, UPDATE-member1.fk,
+                            //UPDATE-member2.fk
+        tx.commit();
+    }
 
 
 
