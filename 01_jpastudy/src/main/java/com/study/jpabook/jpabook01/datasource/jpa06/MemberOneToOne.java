@@ -12,7 +12,6 @@ public class MemberOneToOne {
     private String username;
 
     @OneToOne(mappedBy = "member")
-    //@JoinColumn(name = "LOCKER_ID")
     private LockerOneToOne locker;
 
     //Getter, Setter

@@ -2,7 +2,9 @@ package com.study.jpabook;
 
 import com.study.jpabook.jpabook01.datasource.jap05.Member2;
 import com.study.jpabook.jpabook01.datasource.jap05.Team;
+import com.study.jpabook.jpabook01.datasource.jpa06.MemberManyToMany;
 import com.study.jpabook.jpabook01.datasource.jpa06.MemberOneToMany;
+import com.study.jpabook.jpabook01.datasource.jpa06.ProductManyToMany;
 import com.study.jpabook.jpabook01.datasource.jpa06.TeamOneToMany;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -194,6 +196,90 @@ class JpabookApplicationTests {
         tx.commit();
     }
 
+    //6.15 저장
+    @Test
+    public void save6(){
+        //엔티티 매니저 팩토리 생성
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
+        EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
+        tx.begin();
 
+        ProductManyToMany productA = new ProductManyToMany();
+        productA.setId("productA");
+        productA.setName("상품A");
+        em.persist(productA);
+
+        MemberManyToMany member1 = new MemberManyToMany();
+        member1.setId("member1");
+        member1.setUsername("회원1");
+        member1.getProducts().add(productA);    //연관관계 설정
+        em.persist(member1);
+        tx.commit();
+    }
+
+    @Test
+    public void find(){
+        //엔티티 매니저 팩토리 생성
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
+        EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
+        tx.begin();
+        ProductManyToMany productA = new ProductManyToMany();
+        productA.setId("productA");
+        productA.setName("상품A");
+        em.persist(productA);
+
+        ProductManyToMany productB = new ProductManyToMany();
+        productB.setId("productB");
+        productB.setName("상품B");
+        em.persist(productB);
+
+        MemberManyToMany member1 = new MemberManyToMany();
+        member1.setId("member1");
+        member1.setUsername("회원1");
+        member1.getProducts().add(productA);    //연관관계 설정
+        em.persist(member1);
+
+        MemberManyToMany member = em.find(MemberManyToMany.class, "member1");
+        List<ProductManyToMany> products = member.getProducts();    //객체 그래프 탐색
+        for(ProductManyToMany productManyToMany : products){
+            System.out.println("product.name = " + productManyToMany.getName());
+        }
+
+        tx.commit();
+    }
+
+    @Test
+    public void find22(){
+        //엔티티 매니저 팩토리 생성
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
+        EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
+        tx.begin();
+        ProductManyToMany productA = new ProductManyToMany();
+        productA.setId("productA");
+        productA.setName("상품A");
+
+        em.persist(productA);
+
+        MemberManyToMany member1 = new MemberManyToMany();
+        member1.setId("member1");
+        member1.setUsername("회원1");
+        member1.getProducts().add(productA);    //연관관계 설정
+        em.persist(member1);
+
+        productA.getMembers().add(member1);
+        em.persist(productA);
+
+        tx.commit();
+
+        ProductManyToMany product = em.find(ProductManyToMany.class, "productA");
+        List<MemberManyToMany> members = product.getMembers();
+        for (MemberManyToMany memberManyToMany : members) {
+            System.out.println("member = " + memberManyToMany.getUsername());
+        }
+
+    }
 
 }

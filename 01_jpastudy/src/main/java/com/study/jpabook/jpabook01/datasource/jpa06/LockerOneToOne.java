@@ -11,7 +11,8 @@ public class LockerOneToOne {
 
     private String name;
 
-    @OneToOne(mappedBy = "MEMBER_ID")
+    @OneToOne
+    @JoinColumn(name = "MEMBER_ID")
     private MemberOneToOne member;
 
     //Getter, Setter
@@ -29,5 +30,13 @@ public class LockerOneToOne {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public MemberOneToOne getMember() {
+        return member;
+    }
+
+    public void setMember(MemberOneToOne member) {
+        this.member = member;
     }
 }
