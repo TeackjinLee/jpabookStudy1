@@ -53,7 +53,7 @@ public class jpaMain5_ManyToOne {
 
     private static void queryLogicJoin(EntityManager em){
 
-        String jpql = "select m from Member2 m join m.team t where t.name=:teamName";
+        String jpql = "select m from Member3 m join m.team t where t.name=:teamName";
         List<Member2> resultList = em.createQuery(jpql, Member2.class)
                 .setParameter("teamName", "팀1")
                 .getResultList();

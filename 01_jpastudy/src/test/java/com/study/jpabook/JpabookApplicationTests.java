@@ -2,15 +2,14 @@ package com.study.jpabook;
 
 import com.study.jpabook.jpabook01.datasource.jap05.Member2;
 import com.study.jpabook.jpabook01.datasource.jap05.Team;
-import com.study.jpabook.jpabook01.datasource.jpa06.MemberManyToMany;
-import com.study.jpabook.jpabook01.datasource.jpa06.MemberOneToMany;
-import com.study.jpabook.jpabook01.datasource.jpa06.ProductManyToMany;
-import com.study.jpabook.jpabook01.datasource.jpa06.TeamOneToMany;
+import com.study.jpabook.jpabook01.datasource.jpa06.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.*;
 import java.util.List;
+
+import static org.assertj.core.util.DateUtil.now;
 
 @SpringBootTest
 class JpabookApplicationTests {
@@ -250,6 +249,7 @@ class JpabookApplicationTests {
         tx.commit();
     }
 
+
     @Test
     public void find22(){
         //엔티티 매니저 팩토리 생성
@@ -259,7 +259,6 @@ class JpabookApplicationTests {
         tx.begin();
         ProductManyToMany productA = new ProductManyToMany();
         productA.setId("productA");
-        productA.setName("상품A");
 
         em.persist(productA);
 
@@ -279,6 +278,51 @@ class JpabookApplicationTests {
         for (MemberManyToMany memberManyToMany : members) {
             System.out.println("member = " + memberManyToMany.getUsername());
         }
+
+    }
+
+    // 6.4.3 다대다: 매피으이 한계와 극복, 연결 엔티티 사용
+    @Test
+    public void save(){
+        //엔티티 매니저 팩토리 생성
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
+        EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
+        tx.begin();
+        //회원저장
+        Member3 member1 = new Member3();
+        member1.setId("member1");
+        member1.setUsername("회원1");
+        em.persist(member1);
+
+        //상품 저장
+        Product2 productA = new Product2();
+        productA.setId("productA");
+        productA.setName("상품1");
+        em.persist(productA);
+
+        //회원상품 저장
+        MemberProduct2 memberProduct2 = new MemberProduct2();
+        memberProduct2.setMember(member1);      //주문 회원 - 연관관계 설정
+        memberProduct2.setProduct(productA);    //주문 상품 - 연관관계 설정
+        memberProduct2.setOrderAmount(2);       //주문 수량
+        memberProduct2.setOrderDate(now());
+
+        em.persist(memberProduct2);
+
+        tx.commit();
+    }
+
+    @Test
+    public void find6_24(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
+        //기본 키 값 생성
+        MemberProductId memberProductId = new MemberProductId();
+        memberProductId.setMember("member1");
+        memberProductId.setProduct("productA");
+
+        MemberProduct2 memberProduct2 = em.find(MemberProduct2.class, memberProductId);
 
     }
 
