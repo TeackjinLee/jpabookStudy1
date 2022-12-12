@@ -3,6 +3,10 @@ package com.study.jpabook;
 import com.study.jpabook.jpabook01.datasource.jap05.Member2;
 import com.study.jpabook.jpabook01.datasource.jap05.Team;
 import com.study.jpabook.jpabook01.datasource.jpa06.*;
+import com.study.jpabook.jpabook01.datasource.jpa07.Composite732.Parent;
+import com.study.jpabook.jpabook01.datasource.jpa07.Composite732.Parent2;
+import com.study.jpabook.jpabook01.datasource.jpa07.Composite732.ParentId;
+import com.study.jpabook.jpabook01.datasource.jpa07.Composite732.ParentId2;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -324,6 +328,48 @@ class JpabookApplicationTests {
 
         MemberProduct2 memberProduct2 = em.find(MemberProduct2.class, memberProductId);
 
+    }
+
+    @Test
+    public void save732(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
+        EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
+        tx.begin();
+
+        //기본 키 값 생성
+        Parent parent = new Parent();
+        parent.setId1("myId1");
+        parent.setId2("myId2");
+        parent.setName("parentName");
+        em.persist(parent);
+
+        tx.commit();
+
+        ParentId parentId = new ParentId("myId1","myId2");
+        Parent parents = em.find(Parent.class, parentId);
+        System.out.println(parents);
+    }
+
+    @Test
+    public void EmbeddedId(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
+        EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
+        EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
+        tx.begin();
+
+        //기본 키 값 생성
+        Parent2 parent2 = new Parent2();
+        ParentId2 parentId2 = new ParentId2("myId1", "myId2");
+        parent2.setId(parentId2);
+        parent2.setName("parentName");
+        em.persist(parent2);
+
+        tx.commit();
+
+        ParentId2 parentId = new ParentId2("myId1","myId2");
+        Parent2 parents = em.find(Parent2.class, parentId);
+        System.out.println(parents);
     }
 
 }
